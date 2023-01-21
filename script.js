@@ -1,33 +1,73 @@
-// add display to let the users know who's turn it is
 // add colors 
-// add restart button
-// add victory counter
 // add hover preview
+// refactor and modularize
 const cells = document.querySelectorAll('.game-cell')
+const resetButton = document.querySelector('.reset-game')
+const clearButton = document.querySelector('.clear-game')
+const board = document.querySelector('.game-board')
+const score1Display = document.querySelector('.x-score')
+const score2Display = document.querySelector('.o-score')
 
+
+
+resetButton.addEventListener('click', resetGame)
+clearButton.addEventListener('click', clearBoard)
+
+function resetGame() {
+    clearBoard()
+    resetScores()
+}
+function resetScores() {
+    gameBoard.player1Score = 0
+    gameBoard.player2Score = 0
+}
+
+function clearBoard() {
+    gameBoard.cells = []
+    render()
+}
 
 const gameBoard = (() => {
     const cells = []
+    const player1Score = 0
+    const player2Score = 0
     
     return {
-        cells
+        cells,
+        player1Score,
+        player2Score
     }
 })()
 
-document.addEventListener('click', (e) => {
+board.addEventListener('click', (e) => {
     if (gameBoard.cells[e.target.id] === undefined) {
         const marker = xOrO()
         gameBoard.cells[e.target.id] = marker
         render()
         if(victoryCheck() === 'x') {
             alert('x wins')
+            incrementScore('x')
         }
         if(victoryCheck() === 'o') {
             alert('o wins')
+            incrementScore('o')
         }
     }
     
 })
+
+function incrementScore(winner) {
+    if (winner === 'x') {
+        gameBoard.player1Score += 1
+        score1Display.innerHTML = gameBoard.player1Score
+
+    } else {
+        gameBoard.player2Score += 1
+        score2Display.innerHTML = gameBoard.player2Score
+    }
+    clearBoard()
+
+}
 
 function render() {
     cells.forEach(cell => {
