@@ -1,14 +1,37 @@
-// add colors 
+// scratch condition
+// player victory message
+// persistent board until new round
+
 // add hover preview
 // refactor and modularize
+// add mobile responsiveness
 const cells = document.querySelectorAll('.game-cell')
 const resetButton = document.querySelector('.reset-game')
 const clearButton = document.querySelector('.clear-game')
 const board = document.querySelector('.game-board')
 const score1Display = document.querySelector('.x-score')
 const score2Display = document.querySelector('.o-score')
+let temp = {}
 
+document.addEventListener('submit', (e) => {
+    e.preventDefault()
+    let input = new FormData(document.querySelector('form'))
+    input = Object.fromEntries(input)
+    document.querySelector('form').reset()
+    populateData(input)
 
+    temp = input
+})
+
+function populateData(input) {
+    const player1 = document.getElementById('player1')
+    const player2 = document.getElementById('player2')
+
+    player1.innerText = input['player1-name']
+    player1.style.color = input['player1-color']
+    player2.innerText = input['player2-name']
+    player2.style.color = input['player2-color']
+}
 
 resetButton.addEventListener('click', resetGame)
 clearButton.addEventListener('click', clearBoard)
@@ -69,12 +92,17 @@ function incrementScore(winner) {
 
 }
 
-function render() {
+function render(input) {
     cells.forEach(cell => {
         if (gameBoard.cells[cell.id] === undefined) {
             cell.innerHTML = ''
         } else {
             cell.innerHTML = gameBoard.cells[cell.id]
+            if (cell.innerHTML === 'x') {
+                cell.style.color = temp['player1-color']
+            } else {
+                cell.style.color = temp['player2-color']
+            }
         }
         
     });

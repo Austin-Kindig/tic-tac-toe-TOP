@@ -7,6 +7,41 @@ body {
     margin: 0;
     background-color: black;
 }
+header {
+    display: grid;
+    
+}
+
+form {
+    justify-self: center;
+    margin-bottom: 20px;
+    border-bottom:1px solid red;
+}
+
+
+select {
+    background-color: white;
+    border: none;
+    color: black;
+    padding-left: 10px;
+    width: 6rem;
+    border-radius: 2rem;
+}
+
+input {
+    color: black
+}
+
+button {
+    background-color: white;
+    border: none;
+    color: black;
+    height: 2rem;
+    width: 6rem;
+    border-radius: 2rem;
+    margin: 15px;
+    box-shadow: 1px 1px 10px 5px greenyellow;
+}
 
 header h1 {
     text-align: center;
@@ -17,11 +52,13 @@ main {
     grid-template-columns: 1fr 3fr 1fr;
 }
 
+
 .score {
     display: grid;
+    justify-self: right;
     justify-items: center;
     align-items: center;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 5fr 1fr;
     grid-template-rows: repeat(2, 3rem);
     gap: 0 15px;
 }
@@ -39,11 +76,15 @@ main {
 
 .wrapper {
     margin: auto;
-    width: 1000px;
-    height: 1000px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-content: center;
 }
 .game-board {
-    height: 100%;
+    align-self: center;
+    height: 50vw;
+    width: 50vw;
     border: 5px solid;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -52,10 +93,11 @@ main {
 
 .game-cell {
     display: flex;
-    border: 1px solid;
+    border: 1px solid white;
     align-content: center;
     justify-content: center;
-    font-size: 15rem;
+    font-size: 13vw;
+    
 }
 .buttons {
     display: grid;
@@ -64,12 +106,5 @@ main {
 }
 
 .buttons button{
-    background-color: white;
-    border: none;
-    color: black;
-    height: 2rem;
-    width: 6rem;
-    border-radius: 2rem;
-    margin: 15px;
     box-shadow: 1px 1px 10px 5px yellow;
 }

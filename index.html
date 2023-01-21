@@ -11,12 +11,41 @@
 <body>
     <header>
         <h1>Tic-Tac-Toe Game</h1>
+        <form action="" class="player-options">
+            <label for="player1-name">Player 1's Name:</label>
+            <input type="text" name="player1-name" id="player1-name">
+            <label for="player2-name">Player 2's Name:</label>
+            <input type="text" name="player2-name" id="player2-name">
+            <label for="player1-color">Player 1, choose a color:</label>
+            <select id="player1-color" name="player1-color">
+              <option value="red">red</option>
+              <option value="green">green</option>
+              <option value="blue">blue</option>
+              <option value="hotpink">pink</option>
+              <option value="yellow">yellow</option>
+              <option value="orange">orange</option>
+              <option value="cyan">cyan</option>
+              <option value="white">white</option>
+            </select> 
+            <label for="player2-color">Player 2, choose a color:</label>
+            <select id="player2-color" name="player2-color">
+              <option value="red">red</option>
+              <option value="green">green</option>
+              <option value="blue">blue</option>
+              <option value="hotpink">pink</option>
+              <option value="yellow">yellow</option>
+              <option value="orange">orange</option>
+              <option value="cyan">cyan</option>
+              <option value="white">white</option>
+            </select> 
+            <button type="submit">Start Game</button>
+        </form>
     </header>
     <main>
         <div class="score">
-            <span>Player 1 Score:</span>
+            <span id="player1"></span>
             <span class="x-score"></span>
-            <span>Player 2 Score:</span>
+            <span id="player2"></span>
             <span class="o-score"></span>
         </div>
         <div class="wrapper">
