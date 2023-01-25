@@ -1,8 +1,5 @@
-// scratch condition
-// player victory message
-// persistent board until new round
+// add hover preview?
 
-// add hover preview
 // refactor and modularize
 // add mobile responsiveness
 const cells = document.querySelectorAll('.game-cell')
@@ -11,6 +8,7 @@ const clearButton = document.querySelector('.clear-game')
 const board = document.querySelector('.game-board')
 const score1Display = document.querySelector('.x-score')
 const score2Display = document.querySelector('.o-score')
+const userMessage = document.querySelector('.user-message')
 let temp = {}
 
 document.addEventListener('submit', (e) => {
@@ -68,12 +66,17 @@ board.addEventListener('click', (e) => {
         gameBoard.cells[e.target.id] = marker
         render()
         if(victoryCheck() === 'x') {
-            alert('x wins')
+            displayMessage(`${temp['player1-name']} wins`)
             incrementScore('x')
+            return
         }
         if(victoryCheck() === 'o') {
-            alert('o wins')
+            displayMessage(`${temp['player2-name']} wins`)
             incrementScore('o')
+            return
+        }
+        if(scratchCheck() === true) {
+            displayMessage('Scratch!')
         }
     }
     
@@ -140,24 +143,24 @@ function victoryCheck() {
     const xWin = 'xxx'
     const oWin = 'ooo'
     let victory = ''
-        array.forEach(element => {
-            if (element.join('') === xWin) {
-                victory = 'x'
-            }
-            if (element.join('') === oWin) {
-                victory = 'o'
-            }
-        })
     
+    array.forEach(element => {
+        if (element.join('') === xWin) {
+            victory = 'x'
+        }
+        if (element.join('') === oWin) {
+            victory = 'o'
+        }
+    })
     return victory
-
 }
 
-
-/*
-function horizontalCheck() {
-    const win = ['x','x','x']
-    for (i = 0; i > 3; i--) {
-
+function scratchCheck() {
+    if(gameBoard.cells.filter(n=> n === 0 || n ).length === 9) {
+        return true
     }
-} */
+}
+
+function displayMessage(message) {
+    userMessage.innerText = message
+}
