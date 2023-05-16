@@ -1,11 +1,95 @@
-// add hover preview?
 
-// refactor and modularize
-// add mobile responsiveness
-const cells = document.querySelectorAll('.game-cell')
+let temp = {}
+
+document.addEventListener('submit', (e) => {
+    e.preventDefault()
+    let input = new FormData(document.querySelector('form'))
+    input = Object.fromEntries(input)
+    document.querySelector('form').reset()
+    populateData(input)
+
+    temp = input
+})
+
+// game board module - holds the board array and
+// manages the markers on it.
+const gameBoard = (() => {
+    board: []
+
+    const placeMarker = (marker, position) => {
+        board[position] = marker;
+    }
+    const check = () => {
+
+    }
+    const getBoard = () => {
+        return board;
+    }
+
+    return {
+        placeMarker,
+        check,
+        getBoard
+    };
+})();
+
+// factory to create tic-tac-toe players
+const Player = (name, color) => {
+    name : name
+    color : color
+    score : 0
+
+    const getName = () => {
+        return name
+    }
+    const getColor = () => {
+        return color
+    }
+    const getScore = () => {
+        return score
+    }
+
+    const incrementScore = () => {
+        ++score
+    }
+
+    return {
+        getName,
+        getColor,
+        getScore,
+        incrementScore
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+//const cells = document.querySelectorAll('.game-cell')
 const resetButton = document.querySelector('.reset-game')
 const clearButton = document.querySelector('.clear-game')
-const board = document.querySelector('.game-board')
+//const board = document.querySelector('.game-board')
 const score1Display = document.querySelector('.x-score')
 const score2Display = document.querySelector('.o-score')
 const userMessage = document.querySelector('.user-message')
@@ -163,4 +247,4 @@ function scratchCheck() {
 
 function displayMessage(message) {
     userMessage.innerText = message
-}
+}*/
