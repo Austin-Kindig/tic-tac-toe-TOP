@@ -1,26 +1,76 @@
-
-let temp = {}
-
 document.addEventListener('submit', (e) => {
     e.preventDefault()
     let input = new FormData(document.querySelector('form'))
     input = Object.fromEntries(input)
+    
+    // create players
+    let player1 = Player(input['player1-name'], input['player1-color'])
+    let player2 = Player(input['player2-name'], input['player2-color'])
     document.querySelector('form').reset()
-    populateData(input)
+    return {
+        player1,
+        player2
+    }
+})
 
-    temp = input
+// game control logic
+const Game = (() => {
+    // check to see if any row has 3 markers that are the same
+    const horizontalCheck = () => {
+        let board = gameBoard.getBoard()
+        for (position = 0; position <= 6; position + 3) {
+            if ((new Set(board[position], board[position + 1], board[position + 2]).size == 1) && (board[position] != null)) {
+                return 'victory'
+            }
+        }
+    }
+    // check to see if any column has 3 markers that are the same
+    const verticalCheck = () => {
+        let board = gameBoard.getBoard()
+        for (position = 0; position <= 2; position + 1) {
+            if ((new Set(board[position], board[position + 3], board[position + 6]).size == 1) && (board[position] != null)) {
+                return 'victory'
+            }
+        }
+    }
+    // check to see if any diagonal row has 3 markers that are the same
+    const diagonalCheck = () => {
+        let board = gameBoard.getBoard()
+        if ((new Set(board[0], board[4], board[8]).size == 1) && (board[0] != null)) {
+            return 'victory'
+        }
+        if ((new Set(board[2], board[4], board[6] == 1).size == 1) && (board[2] != null)) {
+            return 'victory'
+        }
+    }
+    // check to see if the game board is full (tie condition)
+    const isFull = () => {
+        if (gameBoard.cells.filter(n => n === 0 || n).length === 9) {
+            return true
+        }
+    }
+    // check whether any victory/tie conditions have been met
+    const checkVictory = () => {
+       if ((horizontalCheck() == 'victory') || (verticalCheck() == 'victory') || (diagonalCheck() == 'victory')) {
+            return 'end'
+        }
+        else if (isFull() == true) {
+            return 'tie'
+        }
+    }
+
+    return {
+        checkVictory
+    }
 })
 
 // game board module - holds the board array and
 // manages the markers on it.
-const gameBoard = (() => {
+const GameBoard = (() => {
     board: []
 
     const placeMarker = (marker, position) => {
         board[position] = marker;
-    }
-    const check = () => {
-
     }
     const getBoard = () => {
         return board;
@@ -28,7 +78,6 @@ const gameBoard = (() => {
 
     return {
         placeMarker,
-        check,
         getBoard
     };
 })();
@@ -68,23 +117,6 @@ const Player = (name, color) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 //const cells = document.querySelectorAll('.game-cell')
 const resetButton = document.querySelector('.reset-game')
@@ -93,17 +125,7 @@ const clearButton = document.querySelector('.clear-game')
 const score1Display = document.querySelector('.x-score')
 const score2Display = document.querySelector('.o-score')
 const userMessage = document.querySelector('.user-message')
-let temp = {}
 
-document.addEventListener('submit', (e) => {
-    e.preventDefault()
-    let input = new FormData(document.querySelector('form'))
-    input = Object.fromEntries(input)
-    document.querySelector('form').reset()
-    populateData(input)
-
-    temp = input
-})
 
 function populateData(input) {
     const player1 = document.getElementById('player1')
