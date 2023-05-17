@@ -13,6 +13,7 @@ const Game = (() => {
             currentPlayer = 2
             if (checkVictory() === 'end') {
                 player1.incrementScore()
+                victoryMessage(player1.getName())
                 setTimeout(GameBoard.clear, 1000)
             }
         }
@@ -21,11 +22,13 @@ const Game = (() => {
             currentPlayer = 1
             if (checkVictory() === 'end') {
                 player2.incrementScore()
+                victoryMessage(player2.getName())
                 setTimeout(GameBoard.clear, 1000)
             }
         }
         if (isFull() === true) {
             setTimeout(GameBoard.clear, 1000)
+            document.querySelector('.user-message').innerText = 'Tie!'
         }
         updateDisplay()
     }
@@ -76,6 +79,9 @@ const Game = (() => {
             return 'tie'
         }
         return false
+    }
+    const victoryMessage = (player) => {
+        document.querySelector('.user-message').innerText = `Congratulations ${player}!`
     }
     const displayPlayers = () => {
         const player1Display = document.getElementById('player1')
