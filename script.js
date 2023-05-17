@@ -5,6 +5,8 @@ const Game = (() => {
     const resetCurrentPlayer = () => {
         currentPlayer = 1
     }
+    // place marker based on current player value and then check for victory/endgame conditions
+    // update/reset displays following
     const playRound = (position) => {
         if (currentPlayer === 1) {
             GameBoard.placeMarker('x', position)
@@ -22,36 +24,36 @@ const Game = (() => {
                 setTimeout(GameBoard.clear, 1000)
             }
         }
-        if (isFull() == true) {
+        if (isFull() === true) {
             setTimeout(GameBoard.clear, 1000)
         }
         updateDisplay()
     }
     // check to see if any row has 3 markers that are the same
     const horizontalCheck = () => {
-        let board = GameBoard.getBoard()
-        for (position = 0; position <= 6; position += 3) {
-            if ((new Set([board[position], board[position + 1], board[position + 2]]).size == 1) && (board[position] != null)) {
+        const board = GameBoard.getBoard()
+        for (let position = 0; position <= 6; position += 3) {
+            if ((new Set([board[position], board[position + 1], board[position + 2]]).size === 1) && (board[position] != null)) {
                 return 'victory'
             }
         }
     }
     // check to see if any column has 3 markers that are the same
     const verticalCheck = () => {
-        let board = GameBoard.getBoard()
-        for (position = 0; position <= 2; position++) {
-            if ((new Set([board[position], board[position + 3], board[position + 6]]).size == 1) && (board[position] != null)) {
+        const board = GameBoard.getBoard()
+        for (let position = 0; position <= 2; position++) {
+            if ((new Set([board[position], board[position + 3], board[position + 6]]).size === 1) && (board[position] != null)) {
                 return 'victory'
             }
         }
     }
     // check to see if any diagonal row has 3 markers that are the same
     const diagonalCheck = () => {
-        let board = GameBoard.getBoard()
-        if ((new Set([board[0], board[4], board[8]]).size == 1) && (board[0] != null)) {
+        const board = GameBoard.getBoard()
+        if ((new Set([board[0], board[4], board[8]]).size === 1) && (board[0] != null)) {
             return 'victory'
         }
-        if ((new Set([board[2], board[4], board[6]]).size == 1) && (board[2] != null)) {
+        if ((new Set([board[2], board[4], board[6]]).size === 1) && (board[2] != null)) {
             return 'victory'
         }
     }
@@ -63,20 +65,23 @@ const Game = (() => {
     }
     // check whether any victory/tie conditions have been met
     const checkVictory = () => {
-       if ((horizontalCheck() == 'victory') || (verticalCheck() == 'victory') || (diagonalCheck() == 'victory')) {
+        // win conditions
+       if ((horizontalCheck() === 'victory') || (verticalCheck() === 'victory') || (diagonalCheck() === 'victory')) {
         resetCurrentPlayer()    
         return 'end'
         }
-        else if (isFull() == true) {
+        // tie condition
+        else if (isFull() === true) {
             resetCurrentPlayer()    
             return 'tie'
         }
+        return false
     }
     const displayPlayers = () => {
         const player1Display = document.getElementById('player1')
-        const player1Score = document.getElementsByClassName('x-score')
+        const player1Score = document.getElementById('x-score')
         const player2Display = document.getElementById('player2')
-        const player2Score = document.getElementsByClassName('o-score')
+        const player2Score = document.getElementById('o-score')
 
         player1Display.innerText = player1.getName()
         player1Display.style.color = player1.getColor()
@@ -99,6 +104,7 @@ const Game = (() => {
     return {
         resetCurrentPlayer,
         playRound,
+        checkVictory,
         displayPlayers,
         reset,
         updateDisplay
@@ -114,6 +120,7 @@ const GameBoard = (() => {
         board[position] = marker;
     }
     const getBoard = () => board;
+    // read the board array and translate to viewable format
     const draw = () => {
         const cells = document.querySelectorAll('.game-cell')
         cells.forEach(cell => {
@@ -176,38 +183,41 @@ const Player = (initial) => {
     }
 }
 
-let player1 = Player('player 1')
+// initialize player skeletons
+const player1 = Player('player 1')
 player1.marker = 'x'
-let player2 = Player('player 2')
+const player2 = Player('player 2')
 player2.marker = 'o'
 
 document.addEventListener('submit', (e) => {
     e.preventDefault()
+    // blank slate
     Game.reset()
+    // grab data from form submission
     let input = new FormData(document.querySelector('form'))
     input = Object.fromEntries(input)
-    
+    // update player data based on form submission
     player1.setName(input['player1-name'])
     player1.setColor(input['player1-color'])
     player2.setName(input['player2-name'])
     player2.setColor(input['player2-color'])
+    // freshen the form for subsequent use
     document.querySelector('form').reset()
+    // update the player data display
     Game.displayPlayers()
 })
 
-const resetButton = document.querySelector('.reset-game')
-const clearButton = document.querySelector('.clear-game')
-resetButton.addEventListener('click', Game.reset())
-clearButton.addEventListener('click', GameBoard.clear())
+// event listeners for game reset and board clear buttons
+const resetButton = document.getElementById('reset-game')
+const clearButton = document.getElementById('clear-game')
+resetButton.addEventListener('click', Game.reset)
+clearButton.addEventListener('click', GameBoard.clear)
 
-// need event listerner for clicking cells,
+// listener for clicking on game cells
+// will not allow the game to progress if the clicked cell already has anything or 
+// the game needs reset still
 document.querySelector('.game-board').addEventListener('click', (e) => {
-    Game.playRound(e.target.id)
+    if ((e.target.innerText === '') && (Game.checkVictory() === false)) {
+        Game.playRound(e.target.id)
+    }
 })
-
-/*
-//const board = document.querySelector('.game-board')
-const userMessage = document.querySelector('.user-message')
-
-
-*/
